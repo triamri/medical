@@ -9,5 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+  Hari.associate = function(models){
+    Hari.hasMany(models.Jadwal)
+  }
   return Hari;
 };

@@ -9,5 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  Kategori.associate = function(models){
+    Kategori.hasMany(models.Dokter);
+  }
+
   return Kategori;
 };

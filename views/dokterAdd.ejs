@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ADD DOCTER</title>
+  </head>
+    <body>
+        <form action="/dokters/add" method="post">
+                name <br>
+                <td> <input type="text" name="name" placeholder="Insert name"> </td>
+                <br>
+                alamat
+                <br>
+                <td> <input type="text" name="alamat" placeholder="Insert alamat"> </td>
+                <br>
+                contact
+                <br>
+                <td> <input type="text" name="contact" placeholder="Insert contact"> </td>
+                <br>
+                email
+                <br>
+                <td> <input type="text" name="email" placeholder="Insert email"> </td>
+                <br>
+                kategoriID
+                <br>
+                <td>
+                  <select name="KategoriId">
+                  <% dataKategori.forEach( data => { %>
+
+                    <option value="<%= data.id %>"><%= data.kategori %></option>
+
+                  <% }) %>
+                </td>
+                <br>
+                Submit
+                <br>
+                <td> <input type="submit" value="ADD"> </td>
+        </form>
+      </table>
+      </body>
+</html>

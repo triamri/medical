@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dokter</title>
+  </head>
+  <body>
+    <div align="center">
+      <a href="dokters/add">ADD DOKTER</a>
+    </div>
+    <table align="center">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Alamat</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Spesialis</th>
+        <th>Action</th>
+      </tr>
+      <%
+
+        let no = 1;
+
+        rows.forEach(function(row) {
+
+      %>
+      <tr>
+        <td><%= no %> </td>
+        <td><%= row.name %> </td>
+        <td><%= row.alamat %> </td>
+        <td><%= row.contact %> </td>
+        <td><%= row.email %></td>
+        <td><%= row.Kategori.kategori %></td>
+        <td> <a href="/dokters/edit/<%=row.id%>"> edit</a> <a href="/dokters/delete/<%=row.id%>">delete</a> </td>
+      </tr>
+      <%
+
+      no++;
+
+      })
+
+      %>
+    </table>
+  </body>
+</html>
