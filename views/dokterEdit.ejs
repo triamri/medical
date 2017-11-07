@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EDIT STUDENTS</title>
+  </head>
+  <body>
+    <h1>EDIT DOCTER</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Alamat</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>KategoriID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <form action="/dokters/edit/<%= rows.id %>" method="post">
+            <td><input type="text" name="name" value="<%= rows.name %>"></td>
+            <td><input type="text" name="alamat" value="<%= rows.alamat %>"></td>
+            <td><input type="text" name="contact" value="<%= rows.contact %>"></td>
+            <td><input type="text" name="email" value="<%= rows.email %>"></td>
+            <td>
+            <select name="KategoriId">
+              <% dataKategori.forEach(kategori => {
+
+                  if(kategori.id == rows.KategoriId){
+
+              %>
+
+                    <option value="<%= kategori.id %>" selected><%= kategori.kategori %></option>
+
+              <%
+
+                  }else{
+
+              %>
+                    <option value="<%= kategori.id %>"><%= kategori.kategori %></option>
+              <%
+                  }
+
+                  })
+
+              %>
+            </select></td>
+            <td><input type="submit" value="edit"></td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
