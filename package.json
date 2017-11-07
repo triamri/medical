@@ -1,0 +1,23 @@
+{
+  "name": "medical",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triamri/medical.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/triamri/medical/issues"
+  },
+  "homepage": "https://github.com/triamri/medical#readme",
+  "dependencies": {
+    "pg": "^7.4.0",
+    "sequelize": "^4.22.5"
+  }
+}
