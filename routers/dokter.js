@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const model = require ('../models');
 
+
 router.get('/', function (req, res) {
   model.Dokter.findAll({
     order : [['name','ASC']],
@@ -12,6 +13,18 @@ router.get('/', function (req, res) {
     res.redirect("dokters")
   })
 })
+
+router.get('/login', function (req, res) {
+  
+  res.render('loginDokter');
+  
+});
+
+router.get('/register', function (req, res) {
+  model.Kategori.findAll().then(dataKategori => {
+    res.render('registerDokter', { dataKategori });
+  });
+});
 
 router.get('/add', (req, res) => {
   model.Kategori.findAll().then(dataKategori => {

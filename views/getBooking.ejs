@@ -1,0 +1,56 @@
+<%- include("partials/headerpasien.ejs",{title:"Dokter"}) %>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">AddBooking</li>
+            </ol>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <h2><%= rows.name %></h2>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tr>
+                        <th>ID</th>
+                        <th>Hari</th>
+                        <th>Jam Buka</th>
+                        <th>Jam Tutup</th>
+                        <th>Action</th>
+                    </tr>
+        <%
+
+            let no = 1;
+
+            rows.Jadwals.forEach(function(row) {
+
+        %>
+                        <tr>
+                            <td>
+                                <%= no %>
+                            </td>
+                            <td>
+                                <%= row.Hari.hari %>
+                            </td>
+                            <td>
+                                <%= row.jambuka %>
+                            </td>
+                            <td>
+                                <%= row.jamtutup %>
+                            </td>
+                            <td> <a href="/pasiens/getbooking?idDoktor=<%=rows.id%>&contact=<%=rows.contact%>&idjadwal=<%=row.id%>&hari=<%=row.Hari.hari%>">Booking</a></td>
+                        </tr>
+        <%
+
+          no++;
+
+          })
+
+        %>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%- include partials/footer.ejs %>
