@@ -22,7 +22,9 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "nexmo": "^2.0.2",
     "pg": "^7.4.0",
-    "sequelize": "^4.22.5"
+    "sequelize": "^4.22.5",
+    "twilio": "^3.9.2"
   }
 }
