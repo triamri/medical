@@ -28,22 +28,21 @@ router.get('/register', function (req, res) {
 });
 
 router.get('/add', (req, res) => {
-      res.render('pasienAdd');
+      res.render('pasienAdd', {err : null});
 })
 
 router.post('/add', (req, res) => {
   model.Pasien.create(req.body).then(rows => {
     res.redirect('/pasiens')
   }).catch(err => {
-    res.send(err);
+    res.render('pasienAdd', {err})
   })
-  // res.send(req.body);
 })
 
 router.get('/edit/:id', (req,res) => {
   // res.send('test')
   model.Pasien.findById(req.params.id).then(rows => {
-      res.render('pasienEdit', { rows });
+      res.render('pasienEdit', {rows, err : null });
   }).catch(err => {
     console.log(err);
   })
@@ -57,7 +56,10 @@ router.post('/edit/:id', (req,res) => {
   }).then(data => {
     res.redirect('/pasiens');
   }).catch(err => {
-    res.send(err);
+    model.Pasien.findById(req.params.id).then(rows => {
+      // res.send(err)
+        res.render('pasienEdit', {rows, err });
+    })
   });
 })
 

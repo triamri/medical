@@ -28,7 +28,7 @@ router.get('/register', function (req, res) {
 
 router.get('/add', (req, res) => {
   model.Kategori.findAll().then(dataKategori => {
-      res.render('dokterAdd',{ dataKategori });
+      res.render('dokterAdd',{ dataKategori,err:null });
   });
 })
 
@@ -36,7 +36,10 @@ router.post('/add', (req, res) => {
   model.Dokter.create(req.body).then(rows => {
     res.redirect('/dokters')
   }).catch(err => {
-    res.send(err);
+    // res.send(err)
+    model.Kategori.findAll().then(dataKategori => {
+        res.render('dokterAdd',{ dataKategori, err });
+    });
   })
   // res.send(req.body);
 })
@@ -45,7 +48,7 @@ router.get('/edit/:id', (req,res) => {
   // res.send('test')
   model.Dokter.findById(req.params.id).then(rows => {
     model.Kategori.findAll().then(dataKategori => {
-      res.render('dokterEdit', {rows,dataKategori});
+      res.render('dokterEdit', {rows, dataKategori, err: null});
     })
   }).catch(err => {
     console.log(err);
@@ -60,8 +63,13 @@ router.post('/edit/:id', (req,res) => {
   }).then(data => {
     res.redirect('/dokters');
   }).catch(err => {
-    res.send(err);
-  });
+    // res.send(err)
+    model.Dokter.findById(req.params.id).then(rows => {
+      model.Kategori.findAll().then(dataKategori => {
+        res.render('dokterEdit', {rows, dataKategori,err});
+      })
+    })
+  })
 })
 
 router.get('/delete/:id', (req,res) => {

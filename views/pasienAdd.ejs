@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%- include("partials/headerpasien.ejs",{title:"Dokter"}) %>
 
   <div class="content-wrapper">
@@ -14,6 +15,9 @@
       </ol>
     </div>
     <div class="card-body">
+      <% if(err){ %>
+        <%= err %>
+      <% } %>
       <div class="table-responsive">
         <form action="/pasiens/add" method="post">
                 name <br>
@@ -21,11 +25,11 @@
                 <br>
                 contact
                 <br>
-                <td> <input type="text" name="contact" placeholder="Insert contact"> </td>
+                <td> <input type="number" name="contact" placeholder="Insert contact"> </td>
                 <br>
                 email
                 <br>
-                <td> <input type="text" name="email" placeholder="Insert email"> </td>
+                <td> <input type="email" name="email" placeholder="Insert email"> </td>
                 <br>
                 Submit
                 <br>
