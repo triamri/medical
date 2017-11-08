@@ -23,6 +23,7 @@ router.post('/add', (req, res) => {
   model.Dokter.create(req.body).then(rows => {
     res.redirect('/dokters')
   }).catch(err => {
+    // res.send(err)
     model.Kategori.findAll().then(dataKategori => {
         res.render('dokterAdd',{ dataKategori, err });
     });
@@ -49,12 +50,13 @@ router.post('/edit/:id', (req,res) => {
   }).then(data => {
     res.redirect('/dokters');
   }).catch(err => {
+    // res.send(err)
     model.Dokter.findById(req.params.id).then(rows => {
       model.Kategori.findAll().then(dataKategori => {
         res.render('dokterEdit', {rows, dataKategori,err});
       })
-    }),err
-  });
+    })
+  })
 })
 
 router.get('/delete/:id', (req,res) => {

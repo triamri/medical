@@ -2,21 +2,20 @@
 module.exports = (sequelize, DataTypes) => {
   var Pasien = sequelize.define('Pasien', {
     name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                len: {
-                    args: 3,
-                    msg: "Name must be atleast 3 characters in length"
-                }
+          type: DataTypes.STRING,
+          validate : {
+            notEmpty : true
+          }
+    },
+    contact: { type : DataTypes.STRING,
+            validate : {
+              notEmpty : true,
             }
-        },
-    contact: DataTypes.STRING,
+          },
     email: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
             validate: {
+                notEmpty: true,
                 isUnique: function (value, next) {
                     var self = this;
                     Pasien.find({where: {email: value}})
