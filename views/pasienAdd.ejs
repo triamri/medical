@@ -5,6 +5,10 @@
     <title>ADD PASIEN</title>
   </head>
     <body>
+
+      <% if(err){ %>
+      <%= err %>
+      <% } %>
         <form action="/pasiens/add" method="post">
                 name <br>
                 <td> <input type="text" name="name" placeholder="Insert name"> </td>
