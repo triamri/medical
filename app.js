@@ -1,12 +1,16 @@
 const express    = require('express');
 const bodyParser = require('body-parser');
-const app  = express();
+const app        = express();
 
 app.use(bodyParser.urlencoded( { extended : false } ));
 app.use(bodyParser.json());
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
+
+app.use('/css', express.static(__dirname + '/css'));
+app.use('/vendor', express.static(__dirname + '/vendor'));
+app.use('/js', express.static(__dirname + '/js'));
 
 //halaman home
 const index = require('./routers/index');

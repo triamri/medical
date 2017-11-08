@@ -13,5 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  Dokter.associate = function(models){
+    Dokter.belongsTo(models.Kategori);
+    Dokter.hasMany(models.Jadwal)
+  }
+
   return Dokter;
 };

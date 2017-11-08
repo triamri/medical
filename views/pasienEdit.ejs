@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EDIT STUDENTS</title>
+  </head>
+  <body>
+    <h1>EDIT PASIEN</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <form action="/pasiens/edit/<%= rows.id %>" method="post">
+            <td><input type="text" name="name" value="<%= rows.name %>"></td>
+            <td><input type="text" name="contact" value="<%= rows.contact %>"></td>
+            <td><input type="text" name="email" value="<%= rows.email %>"></td>
+            <td><input type="submit" value="edit"></td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

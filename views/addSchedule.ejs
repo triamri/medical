@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ADD SCHEDULE</title>
+  </head>
+  <body>
+    <form action="/dokters/schedule/1/input" method="post">
+      <input type="hidden" name="DokterId" value="1">
+      <input type="text" name="jambuka" value="">
+      <input type="text" name="jamtutup" value="">
+          <td><select name="HariId">
+            <% rows.forEach((row) =>{ %>
+
+            <option value="<%= row.id %>"><%= row.hari %> </option>
+            <% }) %>
+          </select>
+          <input type="submit" value="SUBMIT">
+        </td>
+    </form>
+  </body>
+</html>
