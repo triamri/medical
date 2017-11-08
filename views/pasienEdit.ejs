@@ -6,6 +6,9 @@
   </head>
   <body>
     <h1>EDIT PASIEN</h1>
+    <% if(err){ %>
+    <%= err %>
+    <% } %>
     <table>
       <thead>
         <tr>
@@ -15,11 +18,12 @@
         </tr>
       </thead>
       <tbody>
+
         <tr>
           <form action="/pasiens/edit/<%= rows.id %>" method="post">
             <td><input type="text" name="name" value="<%= rows.name %>"></td>
-            <td><input type="text" name="contact" value="<%= rows.contact %>"></td>
-            <td><input type="text" name="email" value="<%= rows.email %>"></td>
+            <td><input type="number" name="contact" value="<%= rows.contact %>"></td>
+            <td><input type="email" name="email" value="<%= rows.email %>"></td>
             <td><input type="submit" value="edit"></td>
           </form>
         </tr>

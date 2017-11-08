@@ -15,10 +15,13 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
+        <% if(err){ %>
+        <%= err %>
+        <% } %>
         <form action="/dokters/add" method="post">
           <div class="form-group">
             <label for="exampleInputEmail1">Name</label>
-            <input name="name" class="form-control" type="text" aria-describedby="emailHelp" placeholder="Enter Nama">
+            <input name="name" class="form-control" type="text" aria-describedby="name" required placeholder="Enter Nama">
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
@@ -26,7 +29,7 @@
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Kontak</label>
-            <input name="contact" class="form-control" type="text" aria-describedby="emailHelp" placeholder="Enter Kontak">
+            <input name="contact" class="form-control" type="number" aria-describedby="emailHelp" placeholder="Enter Kontak">
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Alamat</label>
@@ -42,7 +45,7 @@
 
                   <% }) %>
 
-                  </select>  
+                  </select>
           </div>
           <div class="form-group">
             <div class="col-md-4">
