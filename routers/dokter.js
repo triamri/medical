@@ -64,20 +64,10 @@ router.get('/delete/:id', (req,res) => {
 })
 
 router.get('/schedule/:id', (req,res) => {
-  model.Dokter.findAll({where : {id : req.params.id},
-    include : [model.Jadwal]
+  model.Jadwal.findAll({where : {DokterId : req.params.id},
+    include : [model.Hari]
   }).then( rows => {
-    rows[0].Jadwals.forEach((setdata,index) => {
-      model.Hari.findOne({where:{id:setdata.HariId}}).then((setHari,index) => {
-        // console.log(setHari.hari);
-        rows[0].Jadwals[1].Nama = 1;
-      });
-
-    })
-
-  res.send(`${rows[0].Jadwals[0].Nama}`);
-    // res.send(rows[0].Hari.hari)
-
+    res.render('schedule',{ rows });
   }).catch(err => {
     res.send(err)
   })

@@ -1,55 +1,75 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>EDIT STUDENTS</title>
-  </head>
-  <body>
-    <h1>EDIT DOCTER</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Alamat</th>
-          <th>Contact</th>
-          <th>Email</th>
-          <th>KategoriID</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
+<%- include("partials/header.ejs",{title:"Dokter"}) %>
+    <div class="content-wrapper">
+      <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="#">Dokter</a>
+          </li><li class="breadcrumb-item active">Edit</li>
+        </ol>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+
           <form action="/dokters/edit/<%= rows.id %>" method="post">
-            <td><input type="text" name="name" value="<%= rows.name %>"></td>
-            <td><input type="text" name="alamat" value="<%= rows.alamat %>"></td>
-            <td><input type="text" name="contact" value="<%= rows.contact %>"></td>
-            <td><input type="text" name="email" value="<%= rows.email %>"></td>
-            <td>
-            <select name="KategoriId">
-              <% dataKategori.forEach(kategori => {
+            <div class="form-group">
+              <label for="exampleInputEmail1">Name</label>
+              <input name="name" value="<%= rows.name %>" class="form-control" type="text" aria-describedby="emailHelp" placeholder="Enter Nama">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input name="email" value="<%= rows.email %>" class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Kontak</label>
+              <input name="contact" value="<%= rows.contact %>" class="form-control" type="text" aria-describedby="emailHelp" placeholder="Enter Kontak">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Alamat</label>
+              <input name="alamat" value="<%= rows.alamat %>" class="form-control" type="text" aria-describedby="emailHelp" placeholder="Enter Alamat">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <select name="KategoriId" class="form-control">
+                  <% dataKategori.forEach(kategori => {
 
                   if(kategori.id == rows.KategoriId){
 
               %>
 
-                    <option value="<%= kategori.id %>" selected><%= kategori.kategori %></option>
+                    <option value="<%= kategori.id %>" selected>
+                      <%= kategori.kategori %>
+                    </option>
 
               <%
 
                   }else{
 
               %>
-                    <option value="<%= kategori.id %>"><%= kategori.kategori %></option>
+                      <option value="<%= kategori.id %>">
+                        <%= kategori.kategori %>
+                      </option>
+
               <%
                   }
 
                   })
 
               %>
-            </select></td>
-            <td><input type="submit" value="edit"></td>
-          </form>
-        </tr>
-      </tbody>
-    </table>
-  </body>
-</html>
+
+              </select>
+            </div>
+            <div class="form-group">
+              <div class="col-md-4">
+                <input type="submit" aria-describedby="emailHelp" value="Edit">
+              </div>
+            </div>
+            </form>
+      </div>
+    </div>
+  </div>
+
+<%- include partials/footer.ejs %>
