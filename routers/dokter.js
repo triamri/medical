@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const model = require ('../models');
 
-
 router.get('/home', function (req, res) {
     res.render('homeDokter');
 })
 
-router.get('/', function (req, res) {
+router.get('/', checkLogin ,function (req, res) {
   model.Dokter.findAll({
     order : [['name','ASC']],
     include : [model.Kategori]
@@ -18,11 +17,37 @@ router.get('/', function (req, res) {
   })
 })
 
+function checkLogin(req, res, next){
+  if (req.session.loggedIn) {
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
+
+
 router.get('/login', function (req, res) {
-  
   res.render('loginDokter');
-  
 });
+
+router.post('/login', function (req, res) {
+  console.log('====================', req.body);
+  model.Logindokter.findOne({
+    where : {username : req.body.username}
+  }).then(function (dokter) {
+    if(dokter) {
+      if(dokter.password == req.body.password){
+        req.session.loggedIn = true
+        req.session.username = dokter.username
+        req.session.id = dokter.id
+      res.send(dokter)
+      }
+    }
+  }).catch(err => {
+    res.redirect('/')
+  })
+})
+
 
 router.get('/register', function (req, res) {
   model.Kategori.findAll().then(dataKategori => {
@@ -30,13 +55,13 @@ router.get('/register', function (req, res) {
   });
 });
 
-router.get('/add', (req, res) => {
+router.get('/add', checkLogin, (req, res) => {
   model.Kategori.findAll().then(dataKategori => {
       res.render('dokterAdd',{ dataKategori,err:null });
   });
 })
 
-router.post('/add', (req, res) => {
+router.post('/add',checkLogin, (req, res) => {
   model.Dokter.create(req.body).then(rows => {
     res.redirect('/dokters')
   }).catch(err => {
@@ -48,7 +73,7 @@ router.post('/add', (req, res) => {
   // res.send(req.body);
 })
 
-router.get('/edit/:id', (req,res) => {
+router.get('/edit/:id',checkLogin, (req,res) => {
   // res.send('test')
   model.Dokter.findById(req.params.id).then(rows => {
     model.Kategori.findAll().then(dataKategori => {
@@ -59,7 +84,7 @@ router.get('/edit/:id', (req,res) => {
   })
 });
 
-router.post('/edit/:id', (req,res) => {
+router.post('/edit/:id', checkLogin, (req,res) => {
   model.Dokter.update(req.body,{
     where : {
       id : req.params.id
@@ -76,7 +101,7 @@ router.post('/edit/:id', (req,res) => {
   })
 })
 
-router.get('/delete/:id', (req,res) => {
+router.get('/delete/:id', checkLogin, (req,res) => {
   model.Dokter.destroy({
     where : {
       id : req.params.id
@@ -88,7 +113,7 @@ router.get('/delete/:id', (req,res) => {
   })
 })
 
-router.get('/schedule/:id', (req,res) => {
+router.get('/schedule/:id', checkLogin, (req,res) => {
   model.Jadwal.findAll({where : {DokterId : req.params.id},
     include : [model.Hari]
   }).then( rows => {
@@ -98,7 +123,7 @@ router.get('/schedule/:id', (req,res) => {
   })
 })
 
-router.get('/schedule/:id/input', (req,res) => {
+router.get('/schedule/:id/input', checkLogin, (req,res) => {
   model.Hari.findAll().then(rows => {
     res.render('addSchedule', {rows})
   }).catch(err => {
@@ -106,17 +131,10 @@ router.get('/schedule/:id/input', (req,res) => {
   })
 })
 
-router.post('/schedule/:id/input', (req,res) => {
+router.post('/schedule/:id/input', checkLogin,(req,res) => {
   model.Jadwal.create(req.body).then(rows => {
     res.redirect('/dokters/schedule/1')
   })
 })
-
-
-
-
-
-
-
 
 module.exports = router;
