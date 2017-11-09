@@ -3,6 +3,10 @@ const router = express.Router();
 const model = require ('../models');
 
 
+router.get('/home', function (req, res) {
+    res.render('homeDokter');
+})
+
 router.get('/', function (req, res) {
   model.Dokter.findAll({
     order : [['name','ASC']],

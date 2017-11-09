@@ -1,22 +1,44 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>ADD SCHEDULE</title>
-  </head>
-  <body>
+<%- include("partials/header.ejs",{title:"Dokter"}) %>
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Dokter</a>
+        </li>
+        <li class="breadcrumb-item active">Add</li>
+      </ol>
+    </div>
+    <div class="card-body">
     <form action="/dokters/schedule/1/input" method="post">
       <input type="hidden" name="DokterId" value="1">
-      <input type="text" name="jambuka" value="">
-      <input type="text" name="jamtutup" value="">
-          <td><select name="HariId">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Jam Buka</label>
+          <input type="text" name="jambuka" value="">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Jam Tutup</label>
+          <input type="text" name="jamtutup" value="">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Hari</label>
+          <select name="HariId">
             <% rows.forEach((row) =>{ %>
 
             <option value="<%= row.id %>"><%= row.hari %> </option>
+            
             <% }) %>
           </select>
+      </div>
+      <div class="form-group">
           <input type="submit" value="SUBMIT">
-        </td>
+      </div>
     </form>
-  </body>
-</html>
+  </div>
+</div>
+
+<%- include partials/footer.ejs %>

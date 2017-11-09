@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Jadwal.associate = function(models){
       Jadwal.belongsTo(models.Hari);
       Jadwal.belongsTo(models.Dokter);
+      Jadwal.hasMany(models.Booking);
   }
   return Jadwal;
 };

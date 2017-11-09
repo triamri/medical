@@ -122,17 +122,18 @@ router.get('/getbooking', (req, res) => {
 });
 
 router.get('/rekorbooking', (req, res) => {
-  model.Dokter.findAll({where:{PasienId : 1}}).then(rows => {
-    res.render('booking', { rows });
+  model.Booking.findAll({where:{PasienId : 1},
+    include:[{
+      model: model.Jadwal,include:[
+        model.Hari, model.Dokter
+      ]
+    }]
+  }).then(rows => {
+    res.render('rekorbooking', { rows });
     // res.send(rows)
   }).catch(err => {
     res.send(err);
   });
 });
-
-router.get('/send', (req, res) => {
-  
-});
-
 
 module.exports = router;
