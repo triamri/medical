@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const model = require ('../models');
+const bcrypt = require('bcrypt');
 const Nexmo = require('nexmo');
+
 const nexmo = new Nexmo({
   apiKey: '42ae8010',
   apiSecret: '88f17a1303d6a354'
@@ -11,10 +13,13 @@ function checkLogin(req, res, next){
   if (req.session.loggedIn) {
     next()
   }else{
-    res.redirect('/login')
+    res.redirect('/pasiens/login')
   }
 }
 
+router.get('/home', checkLogin, function (req, res) {
+  res.render('homePasien');
+})
 
 router.get('/', checkLogin, function (req, res) {
   model.Pasien.findAll({
@@ -33,20 +38,25 @@ router.get('/login', function (req, res) {
 });
 
 router.post('/login', function (req, res) {
-  console.log('====================', req.body);
   model.Loginpasien.findOne({
-    where : {username : req.body.username}
+    where : { username : req.body.username }
   }).then(function (pasien) {
     if(pasien) {
-      if(pasien.password == req.body.password){
-        req.session.loggedIn = true
-        req.session.username = pasien.username
-        req.session.id = pasien.id
-      res.send(pasien)
-      }
+      bcrypt.compare(req.body.password, pasien.password).then(function (result) {
+        if (result) {
+          req.session.loggedIn = true;
+          req.session.username = pasien.username;
+          req.session.id = pasien.id;
+          res.redirect('/pasiens/home');
+        } else {
+          res.redirect('/pasiens/login');
+        }
+      })
+    } else {
+      res.redirect('/pasiens/login');
     }
   }).catch(err => {
-    res.redirect('/')
+    res.redirect('/pasiens/login');
   })
 })
 
@@ -54,56 +64,25 @@ router.get('/register', function (req, res) {
     res.render('registerPasien');
 });
 
-router.get('/add', (req, res) => {
-      res.render('pasienAdd', {err : null});
-})
-
-router.post('/add', checkLogin, (req, res) => {
-  model.Pasien.create(req.body).then(rows => {
-    res.redirect('/pasiens')
-  }).catch(err => {
-    res.render('pasienAdd', {err})
-  })
-})
-
-router.get('/edit/:id', checkLogin,(req,res) => {
-  // res.send('test')
-  model.Pasien.findById(req.params.id).then(rows => {
-      res.render('pasienEdit', {rows, err : null });
-  }).catch(err => {
-    console.log(err);
-  })
-});
-
-router.post('/edit/:id', checkLogin,(req,res) => {
-  model.Pasien.update(req.body,{
-    where : {
-      id : req.params.id
+router.post('/register', function (req, res) {
+  let obj = {
+    name: req.body.name,
+    contact: req.body.contact,
+    email: req.body.email
+  }
+  model.Pasien.create(obj).then(dataId => {
+    let objUser = {
+      username: req.body.username,
+      password: req.body.password,
+      PasienId: dataId.id
     }
-  }).then(data => {
-    res.redirect('/pasiens');
-  }).catch(err => {
-    model.Pasien.findById(req.params.id).then(rows => {
-      // res.send(err)
-        res.render('pasienEdit', {rows, err });
+    model.Loginpasien.create(objUser).then((getData) => {
+      res.redirect('/pasiens/login');
     })
+  }).catch((err) => {
+    res.send(err);
   });
-})
-
-
-router.get('/delete/:id', checkLogin,(req, res) => {
-  model.Pasien.destroy({
-    where: {
-      id : req.params.id
-    }
-  })
-  .then(() => {
-    res.redirect('/pasiens')
-  })
-  .catch(err => {
-    res.send(err)
-  })
-})
+});
 
 router.get('/booking', checkLogin,(req, res) => {
   model.Dokter.findAll({include:model.Kategori}).then(rows => {
@@ -162,8 +141,12 @@ router.get('/rekorbooking', checkLogin, (req, res) => {
   });
 });
 
-router.get('/send', (req, res) => {
-
+router.get('/logout', (req, res) => {
+  req.session.destroy(function (err) {
+    if (!err) {
+      res.redirect('/');
+    }
+  })
 });
 
 

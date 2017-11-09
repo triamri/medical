@@ -1,8 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const model = require ('../models');
+const bcrypt = require('bcrypt');
 
-router.get('/home', function (req, res) {
+function checkLogin(req, res, next) {
+  if (req.session.loggedIn) {
+    next()
+  } else {
+    res.redirect('/dokters/login')
+  }
+}
+
+router.get('/login', function (req, res) {
+  res.render('loginDokter');
+});
+
+router.get('/home', checkLogin, function (req, res) {
     res.render('homeDokter');
 })
 
@@ -13,38 +26,30 @@ router.get('/', checkLogin ,function (req, res) {
   }).then((rows)=> {
     res.render('dokters', {rows : rows})
   }).catch((err) => {
-    res.redirect("dokters")
+    res.send(err);
   })
 })
 
-function checkLogin(req, res, next){
-  if (req.session.loggedIn) {
-    next()
-  }else{
-    res.redirect('/login')
-  }
-}
-
-
-router.get('/login', function (req, res) {
-  res.render('loginDokter');
-});
-
 router.post('/login', function (req, res) {
-  console.log('====================', req.body);
   model.Logindokter.findOne({
-    where : {username : req.body.username}
+    where : { username : req.body.username }
   }).then(function (dokter) {
     if(dokter) {
-      if(dokter.password == req.body.password){
-        req.session.loggedIn = true
-        req.session.username = dokter.username
-        req.session.id = dokter.id
-      res.send(dokter)
-      }
+      bcrypt.compare(req.body.password, dokter.password).then(function (result) {   
+        if (result){
+          req.session.loggedIn = true
+          req.session.username = dokter.username
+          req.session.id = dokter.id
+          res.redirect('/dokters/home');
+        } else {
+          res.redirect('/dokters/login');
+        }
+      })
+    }else{
+        res.redirect('/dokters/login');
     }
   }).catch(err => {
-    res.redirect('/')
+    res.redirect('/dokters/login');
   })
 })
 
@@ -55,63 +60,27 @@ router.get('/register', function (req, res) {
   });
 });
 
-router.get('/add', checkLogin, (req, res) => {
-  model.Kategori.findAll().then(dataKategori => {
-      res.render('dokterAdd',{ dataKategori,err:null });
-  });
-})
-
-router.post('/add',checkLogin, (req, res) => {
-  model.Dokter.create(req.body).then(rows => {
-    res.redirect('/dokters')
-  }).catch(err => {
-    // res.send(err)
-    model.Kategori.findAll().then(dataKategori => {
-        res.render('dokterAdd',{ dataKategori, err });
-    });
-  })
-  // res.send(req.body);
-})
-
-router.get('/edit/:id',checkLogin, (req,res) => {
-  // res.send('test')
-  model.Dokter.findById(req.params.id).then(rows => {
-    model.Kategori.findAll().then(dataKategori => {
-      res.render('dokterEdit', {rows, dataKategori, err: null});
-    })
-  }).catch(err => {
-    console.log(err);
-  })
-});
-
-router.post('/edit/:id', checkLogin, (req,res) => {
-  model.Dokter.update(req.body,{
-    where : {
-      id : req.params.id
+router.post('/register', function (req, res) {
+  let obj = {
+    name: req.body.name,
+    alamat: req.body.alamat,
+    contact: req.body.contact,
+    email: req.body.email,
+    KategoriId: req.body.KategoriId
+  }
+  model.Dokter.create(obj).then(dataId => {
+    let objUser = {
+      username: req.body.username,
+      password: req.body.password,
+      DokterId: dataId.id
     }
-  }).then(data => {
-    res.redirect('/dokters');
-  }).catch(err => {
-    // res.send(err)
-    model.Dokter.findById(req.params.id).then(rows => {
-      model.Kategori.findAll().then(dataKategori => {
-        res.render('dokterEdit', {rows, dataKategori,err});
-      })
+    model.Logindokter.create(objUser).then((getData) => {
+      res.redirect('/dokters/login');
     })
-  })
-})
-
-router.get('/delete/:id', checkLogin, (req,res) => {
-  model.Dokter.destroy({
-    where : {
-      id : req.params.id
-    }
-  }).then(() => {
-    res.redirect('/dokters')
-  }).catch(err => {
+  }).catch((err) => {
     res.send(err);
-  })
-})
+  });
+});
 
 router.get('/schedule/:id', checkLogin, (req,res) => {
   model.Jadwal.findAll({where : {DokterId : req.params.id},
@@ -136,5 +105,14 @@ router.post('/schedule/:id/input', checkLogin,(req,res) => {
     res.redirect('/dokters/schedule/1')
   })
 })
+
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(function (err) {
+    if (!err) {
+      res.redirect('/');
+    }
+  })
+});
 
 module.exports = router;

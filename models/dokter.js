@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   var Dokter = sequelize.define('Dokter', {
     name: {
