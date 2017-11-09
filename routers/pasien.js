@@ -7,7 +7,16 @@ const nexmo = new Nexmo({
   apiSecret: '88f17a1303d6a354'
 });
 
-router.get('/', function (req, res) {
+function checkLogin(req, res, next){
+  if (req.session.loggedIn) {
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
+
+
+router.get('/', checkLogin, function (req, res) {
   model.Pasien.findAll({
     order : [['id','ASC']]
   }).then((rows)=> {
@@ -23,6 +32,24 @@ router.get('/login', function (req, res) {
 
 });
 
+router.post('/login', function (req, res) {
+  console.log('====================', req.body);
+  model.Loginpasien.findOne({
+    where : {username : req.body.username}
+  }).then(function (pasien) {
+    if(pasien) {
+      if(pasien.password == req.body.password){
+        req.session.loggedIn = true
+        req.session.username = pasien.username
+        req.session.id = pasien.id
+      res.send(pasien)
+      }
+    }
+  }).catch(err => {
+    res.redirect('/')
+  })
+})
+
 router.get('/register', function (req, res) {
     res.render('registerPasien');
 });
@@ -31,7 +58,7 @@ router.get('/add', (req, res) => {
       res.render('pasienAdd', {err : null});
 })
 
-router.post('/add', (req, res) => {
+router.post('/add', checkLogin, (req, res) => {
   model.Pasien.create(req.body).then(rows => {
     res.redirect('/pasiens')
   }).catch(err => {
@@ -39,7 +66,7 @@ router.post('/add', (req, res) => {
   })
 })
 
-router.get('/edit/:id', (req,res) => {
+router.get('/edit/:id', checkLogin,(req,res) => {
   // res.send('test')
   model.Pasien.findById(req.params.id).then(rows => {
       res.render('pasienEdit', {rows, err : null });
@@ -48,7 +75,7 @@ router.get('/edit/:id', (req,res) => {
   })
 });
 
-router.post('/edit/:id', (req,res) => {
+router.post('/edit/:id', checkLogin,(req,res) => {
   model.Pasien.update(req.body,{
     where : {
       id : req.params.id
@@ -64,7 +91,7 @@ router.post('/edit/:id', (req,res) => {
 })
 
 
-router.get('/delete/:id', (req, res) => {
+router.get('/delete/:id', checkLogin,(req, res) => {
   model.Pasien.destroy({
     where: {
       id : req.params.id
@@ -78,7 +105,7 @@ router.get('/delete/:id', (req, res) => {
   })
 })
 
-router.get('/booking', (req, res) => {
+router.get('/booking', checkLogin,(req, res) => {
   model.Dokter.findAll({include:model.Kategori}).then(rows => {
     res.render('booking', { rows });
     // res.send(rows)
@@ -87,7 +114,7 @@ router.get('/booking', (req, res) => {
   });
 });
 
-router.get('/addbooking/:id', (req, res) => {
+router.get('/addbooking/:id', checkLogin,(req, res) => {
   model.Dokter.findById(req.params.id, {
     include: [{
       model: model.Jadwal, include: {
@@ -102,7 +129,7 @@ router.get('/addbooking/:id', (req, res) => {
   });
 });
 
-router.get('/getbooking', (req, res) => {
+router.get('/getbooking', checkLogin,(req, res) => {
   nexmo.message.sendSms(
     'Nexmo', req.query.contact, `Booking Jadwal Hari ${req.query.hari}`,
     (err, responseData) => {
@@ -115,13 +142,13 @@ router.get('/getbooking', (req, res) => {
         }
         model.Booking.create(Obj).then((rows) => {
           res.redirect('/rekorbooking');
-        });        
+        });
       }
     }
   );
 });
 
-router.get('/rekorbooking', (req, res) => {
+router.get('/rekorbooking', checkLogin,(req, res) => {
   model.Dokter.findAll({where:{PasienId : 1}}).then(rows => {
     res.render('booking', { rows });
     // res.send(rows)
@@ -131,7 +158,7 @@ router.get('/rekorbooking', (req, res) => {
 });
 
 router.get('/send', (req, res) => {
-  
+
 });
 
 
