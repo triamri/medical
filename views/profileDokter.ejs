@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-<%- include("partials/headerpasien.ejs",{title:"Dokter"}) %>
+<%- include("partials/header.ejs",{title:"Dokter"}) %>
 
   <div class="content-wrapper">
     <div class="container-fluid">
@@ -8,17 +7,17 @@
         <li class="breadcrumb-item">
           <a href="#">Dashboard</a>
         </li>
-        <li class="breadcrumb-item"><a href="#">Dokter</a>
+        <li class="breadcrumb-item"><a href="#">Pasien</a>
         </li>
       </ol>
     </div>
     <div class="card-body">
       <% if(err){ %>
         <%= err %>
-      <% } %>
-      <div class="table-responsive">
-        <table style="width:100%">
-          <tr>
+          <% } %>
+
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <th>Nama</th>
             <th>contact</th>
             <th>email</th>
@@ -29,9 +28,9 @@
             <td><%= rows.contact %></td>
             <td><%= rows.email %></td>
             <td><%= rows.Kategori.kategori %> </td>
+            <td><a href="/dokters/profile/edit">Edit</a></td>
           </tr>
         </table>
-        <a href="/dokters/profile/edit">Edit</a>
       </div>
     </div>
   </div>

@@ -2,7 +2,6 @@ const express    = require('express');
 const bodyParser = require('body-parser');
 const app        = express();
 const session    = require('express-session');
-const bcrypt     = require('bcrypt');
 
 app.use(session({
   secret: 'express'
@@ -30,8 +29,8 @@ app.use('/pasiens', pasien);
 const dokter = require('./routers/dokter');
 app.use('/dokters', dokter);
 
-const login = require('./routers/login');
-app.use('/login', login)
+const admin = require('./routers/admin');
+app.use('/admin', admin)
 
 app.listen(3000,function(){
     console.log('go medical');

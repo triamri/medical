@@ -25,6 +25,7 @@
     "nexmo": "^2.0.2",
     "pg": "^7.4.0",
     "sequelize": "^4.22.5",
+    "sequelize-cli": "^3.0.0",
     "twilio": "^3.9.2"
   }
 }

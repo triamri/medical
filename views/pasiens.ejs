@@ -1,4 +1,4 @@
-<%- include("partials/headerpasien.ejs",{title:"Dokter"}) %>
+<%- include("partials/headeradmin.ejs",{title:"Pasien"}) %>
 <div class="content-wrapper">
     <div class="container-fluid">
       <!-- Breadcrumbs-->
@@ -10,7 +10,7 @@
       </ol>
     </div>
     <div align="center">
-      <a href="pasiens/add">ADD PASIEN</a>
+      <!-- <a href="/admin/pasiens/add">ADD PASIEN</a> -->
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -34,7 +34,7 @@
             <td><%= row.name %> </td>
             <td><%= row.contact %> </td>
             <td><%= row.email %></td>
-            <td> <a href="/pasiens/edit/<%=row.id%>"> edit</a> <a href="/pasiens/delete/<%=row.id%>">delete</a> </td>
+            <td> <a href="/admin/pasiens/delete/<%=row.id%>">delete</a> </td>
           </tr>
           <%
 

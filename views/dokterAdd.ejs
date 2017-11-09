@@ -1,4 +1,4 @@
-<%- include("partials/header.ejs",{title:"Dokter"}) %>
+<%- include("partials/headeradmin.ejs",{title:"Dokter"}) %>
 
   <div class="content-wrapper">
     <div class="container-fluid">
@@ -18,7 +18,7 @@
         <% if(err){ %>
         <%= err %>
         <% } %>
-        <form action="/dokters/add" method="post">
+        <form action="/admin/dokters/add" method="post">
           <div class="form-group">
             <label for="exampleInputEmail1">Name</label>
             <input name="name" class="form-control" type="text" aria-describedby="name" required placeholder="Enter Nama">
