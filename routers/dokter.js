@@ -39,13 +39,61 @@ router.post('/login', function (req, res) {
       if(dokter.password == req.body.password){
         req.session.loggedIn = true
         req.session.username = dokter.username
-        req.session.id = dokter.id
-      res.send(dokter)
+        req.session.idDokter = JSON.stringify(dokter.id)
+      res.redirect('/dokters/profile')
       }
+    }else{
+      res.redirect('/dokters/login')
     }
   }).catch(err => {
     res.redirect('/')
   })
+})
+
+router.get('/profile', (req,res) => {
+  // res.send('test')
+  model.Dokter.findById(req.session.idDokter, {include : [model.Kategori]}).then(rows => {
+      // res.send(rows)
+      res.render('profileDokter', {rows, err : null });
+  }).catch(err => {
+    res.redirect("/profile");
+  });
+});
+//
+// model.Dokter.findAll({
+//   order : [['name','ASC']],
+//   include : [model.Kategori]
+// }).then((rows)=> {
+//   res.render('dokters', {rows : rows})
+// }).catch((err) => {
+//   res.redirect("dokters")
+// })
+
+router.get('/profile/edit', (req,res) => {
+  // res.send('test')
+  model.Dokter.findById(req.session.idDokter).then(rows => {
+    model.Kategori.findAll().then(dataKategori => {
+      // res.send(dataKategori)
+      res.render('dokterEdit', {rows, dataKategori, err: null});
+    })
+  }).catch(err => {
+    console.log(err);
+  })
+});
+
+router.post('/profile/edit',(req,res) => {//postnya belum nih
+  model.Dokter.update(req.body,{
+    where : {
+      id : req.session.idDokter
+    }
+  }).then(data => {
+    res.redirect('/dokters/profile');
+  }).catch(err => {
+    model.Dokter.findById(req.session).then(rows => {
+      // res.send(err)
+        res.render('dokterEdit', {rows, err });
+    })
+  });
 })
 
 
