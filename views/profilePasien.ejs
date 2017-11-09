@@ -1,0 +1,37 @@
+<<<<<<< HEAD
+<%- include("partials/headerpasien.ejs",{title:"Dokter"}) %>
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item"><a href="#">Pasien</a>
+        </li>
+      </ol>
+    </div>
+    <div class="card-body">
+      <% if(err){ %>
+        <%= err %>
+      <% } %>
+      <div class="table-responsive">
+        <table style="width:100%">
+          <tr>
+            <th>Nama</th>
+            <th>contact</th>
+            <th>email</th>
+          </tr>
+          <tr>
+            <td><%= rows.name %></td>
+            <td><%= rows.contact %></td>
+            <td><%= rows.email %></td>
+          </tr>
+        </table>
+        <a href="/pasiens/profile/edit">Edit</a>
+      </div>
+    </div>
+  </div>
+
+<%- include partials/footer.ejs %>

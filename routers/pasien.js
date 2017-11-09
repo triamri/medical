@@ -11,10 +11,9 @@ function checkLogin(req, res, next){
   if (req.session.loggedIn) {
     next()
   }else{
-    res.redirect('/login')
+    res.redirect('/pasiens/login')
   }
 }
-
 
 router.get('/', checkLogin, function (req, res) {
   model.Pasien.findAll({
@@ -41,20 +40,70 @@ router.post('/login', function (req, res) {
       if(pasien.password == req.body.password){
         req.session.loggedIn = true
         req.session.username = pasien.username
-        req.session.id = pasien.id
-      res.send(pasien)
+        req.session.idpasien = JSON.stringify(pasien.id)
+        // res.send(`${pasien.id}`);
+      res.redirect('/pasiens/profile')
+      // res.redirect('/pasiens/home')
       }
+    } else{
+      res.redirect('/pasiens/login')
     }
   }).catch(err => {
-    res.redirect('/')
+    res.redirect('/pasiens/login')
   })
 })
+
+router.get('/profile', (req,res) => {
+  // res.send('test')
+  model.Pasien.findById(req.session.idpasien).then(rows => {
+      // res.send(rows)
+      res.render('profilePasien', {rows, err : null });
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.get('/profile/edit', (req,res) => {
+  // res.send('test')
+  model.Pasien.findById(req.session.idpasien).then(rows => {
+      res.render('pasienEdit', {rows, err : null });
+  }).catch(err => {
+    console.log(err);
+  })
+});
+
+router.post('/profile/edit',(req,res) => {//postnya belum nih
+  model.Pasien.update(req.body,{
+    where : {
+      id : req.session.idpasien
+    }
+  }).then(data => {
+    res.redirect('/pasiens/profile');
+  }).catch(err => {
+    model.Pasien.findById(req.session).then(rows => {
+      // res.send(err)
+        res.render('pasienEdit', {rows, err });
+    })
+  });
+})
+
+
+router.get('/home',(req,res) => {
+  // res.send('Hello World')
+  // res.send('test')
+  model.Pasien.findById(req.session.idpasien).then(rows => {
+    // res.send(req.session.idpasien)
+      res.render('pasienEdit', {rows, err : null });
+  }).catch(err => {
+    console.log(err);
+  })
+});
 
 router.get('/register', function (req, res) {
     res.render('registerPasien');
 });
 
-router.get('/add', (req, res) => {
+router.get('/add', checkLogin,(req, res) => {
       res.render('pasienAdd', {err : null});
 })
 
