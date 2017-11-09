@@ -17,6 +17,7 @@ function checkLogin(req, res, next){
   }
 }
 
+
 router.get('/home', checkLogin, function (req, res) {
   res.render('homePasien');
 })
@@ -46,7 +47,7 @@ router.post('/login', function (req, res) {
         if (result) {
           req.session.loggedIn = true;
           req.session.username = pasien.username;
-          req.session.id = pasien.id;
+          req.session.idpasien = JSON.stringify(pasien.PasienId);
           res.redirect('/pasiens/home');
         } else {
           res.redirect('/pasiens/login');
@@ -57,8 +58,55 @@ router.post('/login', function (req, res) {
     }
   }).catch(err => {
     res.redirect('/pasiens/login');
+
   })
 })
+
+router.get('/profile', checkLogin, (req,res) => {
+  // res.send('test')
+  model.Pasien.findById(req.session.idpasien).then(rows => {
+    // res.send(req.session.idpasien)
+      res.render('profilePasien', {rows, err : null });
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.get('/profile/edit', checkLogin, (req,res) => {
+  // res.send('test')
+  model.Pasien.findById(req.session.idpasien).then(rows => {
+    res.render('pasienEditprofile', {rows, err : null });
+  }).catch(err => {
+    console.log(err);
+  })
+});
+
+router.post('/profile/edit', checkLogin,(req,res) => {//postnya belum nih
+  model.Pasien.update(req.body,{
+    where : {
+      id : req.session.idpasien
+    }
+  }).then(data => {
+    res.redirect('/pasiens/profile');
+  }).catch(err => {
+    model.Pasien.findById(req.session).then(rows => {
+      // res.send(err)
+      res.render('pasienEditprofile', {rows, err });
+    })
+  });
+})
+
+
+router.get('/home', checkLogin,(req,res) => {
+  // res.send('Hello World')
+  // res.send('test')
+  model.Pasien.findById(req.session.idpasien).then(rows => {
+    // res.send(req.session.idpasien)
+      res.render('pasienEdit', {rows, err : null });
+  }).catch(err => {
+    console.log(err);
+  })
+});
 
 router.get('/register', function (req, res) {
     res.render('registerPasien');
@@ -117,10 +165,10 @@ router.get('/getbooking', checkLogin,(req, res) => {
       } else {
         let Obj = {
           JadwalId : req.query.idjadwal,
-          PasienId : 1,
+          PasienId: req.session.idpasien,
         }
         model.Booking.create(Obj).then((rows) => {
-          res.redirect('/rekorbooking');
+          res.redirect('/pasiens/rekorbooking');
         });
       }
     }
@@ -128,7 +176,8 @@ router.get('/getbooking', checkLogin,(req, res) => {
 });
 
 router.get('/rekorbooking', checkLogin, (req, res) => {
-  model.Booking.findAll({where:{PasienId : 1},
+  model.Booking.findAll({
+    where: { PasienId: req.session.idpasien},
     include:[{
       model: model.Jadwal,include:[
         model.Hari, model.Dokter

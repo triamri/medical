@@ -1,4 +1,4 @@
-<%- include("partials/headeradmin.ejs",{title:"Pasien"}) %>
+<%- include("partials/headerpasien.ejs",{title:"Pasien"}) %>
 
   <div class="content-wrapper">
     <div class="container-fluid">
@@ -18,7 +18,7 @@
         <%= err %>
       <% } %>
       <div class="table-responsive">
-          <form action="/admin/pasiens/profile/edit" method="post">
+          <form action="/pasiens/profile/edit" method="post">
             <td><input type="text" name="name" value="<%= rows.name %>"></td><br><br>
             <td><input type="text" name="contact" value="<%= rows.contact %>"></td><br><br>
             <td><input type="text" name="email" value="<%= rows.email %>"></td><br><br>

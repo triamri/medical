@@ -10,7 +10,7 @@
       </ol>
     </div>
     <div align="center">
-      <a href="/dokters/schedule/1/input"> ADD SCHEDULE</a>
+      <a href="/dokters/schedule/input"> ADD SCHEDULE</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -19,6 +19,7 @@
         <td>Jam Buka</td>
         <td>Jam Tutup</td>
         <td>hari</td>
+        <td>Action</td>
       </tr>
 
         <% rows.forEach((row) => { %>
@@ -26,6 +27,7 @@
           <td> <%= row.jambuka %> </td>
           <td> <%= row.jamtutup %> </td>
           <td> <%= row.Hari.hari %></td>
+          <td> <a href="/dokters/schedule/edit/<%=row.id%>"> edit</a> <a href="/dokters/schedule/delete/<%=row.id%>">delete</a> </td>
           </tr>
         <% }) %>
   </table>
