@@ -1,12 +1,20 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>schedule</title>
-  </head>
-  <body>
-    <a href="/dokters/schedule/1/input"> ADD SCHEDULE</a>
-    <table>
+<%- include("partials/header.ejs",{title:"Dokter"}) %>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Dokters</li>
+      </ol>
+    </div>
+    <div align="center">
+      <a href="/dokters/schedule/1/input"> ADD SCHEDULE</a>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
       <tr>
         <td>Jam Buka</td>
         <td>Jam Tutup</td>
@@ -20,8 +28,8 @@
           <td> <%= row.Hari.hari %></td>
           </tr>
         <% }) %>
-    </table>
-
-
-  </body>
-</html>
+  </table>
+  </div>
+</div>
+</div>
+<%- include partials/footer.ejs %>

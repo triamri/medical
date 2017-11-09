@@ -148,10 +148,15 @@ router.get('/getbooking', checkLogin,(req, res) => {
   );
 });
 
-router.get('/rekorbooking', checkLogin,(req, res) => {
-  model.Dokter.findAll({where:{PasienId : 1}}).then(rows => {
-    res.render('booking', { rows });
-    // res.send(rows)
+router.get('/rekorbooking', checkLogin, (req, res) => {
+  model.Booking.findAll({where:{PasienId : 1},
+    include:[{
+      model: model.Jadwal,include:[
+        model.Hari, model.Dokter
+      ]
+    }]
+  }).then(rows => {
+    res.render('rekorbooking', { rows });
   }).catch(err => {
     res.send(err);
   });

@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const model = require ('../models');
 
-
+router.get('/home', function (req, res) {
+    res.render('homeDokter');
+})
 
 router.get('/', checkLogin ,function (req, res) {
   model.Dokter.findAll({

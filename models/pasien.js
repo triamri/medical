@@ -39,5 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  Pasien.associate = function (models) {
+    Pasien.hasMany(models.Booking)
+  }
+
   return Pasien;
 };

@@ -1,0 +1,61 @@
+<%- include("partials/headerpasien.ejs",{title:"Dokter"}) %>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Rekor Booking</li>
+            </ol>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name Dokter</th>
+                        <th>Alamat</th>
+                        <th>Contact</th>
+                        <th>Hari</th>
+                        <th>Jam</th>
+                    </tr>
+        <%
+
+            let no = 1;
+
+            rows.forEach(function(row) {
+
+        %>
+                        <tr>
+                            <td>
+                                <%= no %>
+                            </td>
+                            <td>
+                                <%= row.Jadwal.Dokter.name %>
+                            </td>
+                            <td>
+                                <%= row.Jadwal.Dokter.alamat %>
+                            </td>
+                            <td>
+                                <%= row.Jadwal.Dokter.contact %>
+                            </td>
+                            <td>
+                                <%= row.Jadwal.Hari.hari %>
+                            </td>
+                            <td>
+                                <%= row.Jadwal.jambuka %> - <%= row.Jadwal.jamtutup %>
+                            </td>
+                        </tr>
+                        <%
+
+          no++;
+
+          })
+
+          %>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%- include partials/footer.ejs %>
